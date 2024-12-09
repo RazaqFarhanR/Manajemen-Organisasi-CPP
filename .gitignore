@@ -1,0 +1,21 @@
+# Code::Blocks project files
+*.layout
+*.depend
+
+# Build output
+bin/
+obj/
+*.exe
+*.out
+*.o
+
+# Temporary and backup files
+*.bak
+*.swp
+*~
+*.tmp
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+desktop.ini
