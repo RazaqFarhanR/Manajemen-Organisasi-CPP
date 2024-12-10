@@ -139,9 +139,13 @@ void showOrgOnly(ListOrg L){
         cout << "List Kosong" << endl;
     } else {
        adr_org P = first(L);
+       printf("\n");
        cout << "List Organisasi:" << endl;
        while (P != NULL){
-            cout << info(P).id << endl;
+            cout << "ID: " << info(P).id << endl;
+            cout << "Organisasi: " << info(P).nama << endl;
+            cout << "Tahun Berdiri: " << info(P).tahunBerdiri << endl;
+            cout << "---------------------------------------------" << endl;
             P = next(P);
        };
        cout << endl;
