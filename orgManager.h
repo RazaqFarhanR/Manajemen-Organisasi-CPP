@@ -10,8 +10,8 @@
 using namespace std;
 
 struct organisasi {
+    string id;
     string nama;
-    string kontak;
     int tahunBerdiri;
 };
 
@@ -52,7 +52,7 @@ void menu();
 bool isEmpty(ListOrg L);
 
 void createListOrg(ListOrg &L);
-adr_org createElmOrg(infotype x);
+adr_org createElmOrg(infotypeOrg x);
 void insertLastOrg(ListOrg &L, adr_org P);
 void deleteFirstOrg(ListOrg &L, adr_org &P);
 void deleteAfterOrg(ListOrg &L, adr_org Prec, adr_org &P);
