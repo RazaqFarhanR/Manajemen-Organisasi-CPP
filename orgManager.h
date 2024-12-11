@@ -24,19 +24,19 @@ struct departemen {
     int jumlahAnggota;
 };
 
-typedef struct elemenDep *adr_dep;
-typedef departemen infotypeDep;
+typedef struct elemenDep *adr_dept;
+typedef departemen infotypeDept;
 
 struct elemenOrg {
     adr_org prev;
     infotypeOrg info;
-    adr_dep departemen;
+    adr_dept departemen;
     adr_org next;
 };
 
 struct elemenDep {
-    infotypeDep info;
-    adr_dep next;
+    infotypeDept info;
+    adr_dept next;
 };
 
 struct ListOrg {
@@ -44,15 +44,16 @@ struct ListOrg {
     adr_org last;
 };
 
-struct ListDep {
-    adr_dep first;
+struct ListDept {
+    adr_dept first;
 };
 
 void menu();
 bool isEmpty(ListOrg L);
 
+// ADT Organisasi
 void createListOrg(ListOrg &L);
-adr_org createElmOrg(infotypeOrg x);
+adr_org createElmOrg(infotypeOrg X);
 void insertLastOrg(ListOrg &L, adr_org P);
 void deleteFirstOrg(ListOrg &L, adr_org &P);
 void deleteAfterOrg(ListOrg &L, adr_org Prec, adr_org &P);
@@ -60,6 +61,22 @@ void deleteLastOrg(ListOrg &L, adr_org &P);
 void deleteOrgById(ListOrg &L, string id);
 void showOrgOnly(ListOrg L);
 adr_org searchOrgById(ListOrg L, string X);
+
+// ADT Departemen
+void createListDept(ListDept &LD);
+adr_dept createElmDept(infotypeDept X);
+void insertFirstDept(ListDept &LD, adr_dept PD);
+void insertLastDept(ListDept &LD, adr_dept PD);
+adr_dept searchDept(ListOrg LO, string X);
+void deleteFirstDept(ListOrg &L, adr_dept &P);
+void deleteAfterDept(ListOrg &L, adr_org Prec, adr_dept &P);
+void deleteLastDept(ListOrg &L, adr_dept &P);
+void handleDeleteDept(ListOrg &L, string X);
+
+//General
+void connectDeptToOrg();
+void showAllOrgWithDept();
+void calculateDeptOnOrg();
 
 
 #endif // ORGMANAGER_H_INCLUDED
