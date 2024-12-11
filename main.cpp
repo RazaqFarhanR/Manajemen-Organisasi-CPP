@@ -6,7 +6,7 @@ using namespace std;
 int main()
 {
     ListOrg L;
-    infotype X;
+    infotypeOrg X;
     adr_org P;
     createListOrg(L);
     showOrgOnly(L);
