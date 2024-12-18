@@ -37,7 +37,10 @@ int main()
 
     showOrgOnly(L);
 
-    deleteOrgById(L, "002");
+    // deleteFirstOrg(L, P);
+    // deleteLastOrg(L, P);
+    // deleteAfterOrg(L, searchOrgById(L, "001"), P);
+    // deleteOrgById(L, "002");
 
     showOrgOnly(L);
 

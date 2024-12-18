@@ -16,6 +16,9 @@ void menu(){
     cout << "===============================================================" << endl;
 };
 
+//====================
+// Organisasi Utils
+//====================
 void createListOrg(ListOrg &L){
     first(L) = NULL;
 };
@@ -34,63 +37,74 @@ bool isEmpty(ListOrg L){
     return (first(L) == NULL);
 };
 
-void insertLastOrg(ListOrg &L, adr_org P){
-    if(first(L) == NULL){
+void insertFirstOrg(ListOrg &L, adr_org P){
+    if (first(L) != NULL && last(L) != NULL) {
+        next(P) = first(L);
+        prev(first(L)) = P;
         first(L) = P;
     } else {
-        adr_org last = first(L);
-        while (next(last) != NULL){
-            last = next(last);
-        };
-        next(last) = P;
+        first(L) = P;
+        last(L) = P;
+    }
+}
+
+void insertLastOrg(ListOrg &L, adr_org P){
+    if (first(L) != NULL && last(L) != NULL) {
+        prev(P) = last(L);
+        next(last(L)) = P;
+        last(L) = P;
+    } else {
+        first(L) = P;
+        last(L) = P;
     }
 };
 
 void deleteFirstOrg(ListOrg &L, adr_org &P){
-    if (!isEmpty(L)) {
-        adr_org P = first(L);
-        if (next(P) == NULL) {
+    if (!isEmpty(L)){
+        P = first(L);
+        if (first(L) == last(L)){
             first(L) = NULL;
+            last(L) = NULL;
         } else {
             first(L) = next(P);
-            next(P) = NULL;
+            prev(first(L)) = NULL;
         }
+
+        next(P) = NULL;
     }
 };
 
 void deleteLastOrg(ListOrg &L, adr_org &P){
-    if (!isEmpty(L)) {
-        adr_org Q = first(L);
-        if (next(Q) == NULL) {
+    if (!isEmpty(L)){
+        P = last(L);
+        if (first(L) == last(L)){
             first(L) = NULL;
+            last(L) = NULL;
         } else {
-            while (next(next(Q)) != NULL){
-                Q = next(Q);
-            }
-            P = next(Q);
-            next(Q) = NULL;
-        };
-    };
+            last(L) = prev(P);
+            next(last(L)) = NULL;
+        }
+
+        prev(P) = NULL;
+    }
 };
 
-void deleteAfterOrg(ListOrg &L, adr_org Prec, adr_org &P){
-    if (!isEmpty(L)){
+void deleteAfterOrg(ListOrg &L, adr_org Prec, adr_org &P) {
+    if (!isEmpty(L)) {
         P = next(Prec);
-        if (Prec == first(L) && next(Prec) == NULL) {
-            first(L) = NULL;
-        } else if (next(Prec) == NULL){
-            adr_org Q = first(L);
-            while (next(next(Q)) != NULL){
-                Q = next(Q);
-            };
-            P = next(Q);
-            next(Q) = NULL;
-        } else {
-            next(Prec) = next(P);
+        if (P != NULL) {
+            if (next(P) == NULL) {
+                next(Prec) = NULL;
+            } 
+            else {
+                next(Prec) = next(P);
+                prev(next(P)) = Prec;
+            }
             next(P) = NULL;
-        };
-    };
-};
+            prev(P) = NULL;
+        }
+    }
+}
 
 void deleteOrgById(ListOrg &L, string id){
     if (L.first == NULL) {

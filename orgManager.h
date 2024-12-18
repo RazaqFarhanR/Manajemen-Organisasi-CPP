@@ -3,6 +3,7 @@
 
 #include <iostream>
 #define info(p) p->info
+#define prev(P) P->prev
 #define next(p) p->next
 #define first(L) ((L).first)
 #define last(L) ((L).last)
@@ -54,6 +55,7 @@ bool isEmpty(ListOrg L);
 // ADT Organisasi
 void createListOrg(ListOrg &L);
 adr_org createElmOrg(infotypeOrg X);
+void insertFirstOrg(ListOrg &L, adr_org P);
 void insertLastOrg(ListOrg &L, adr_org P);
 void deleteFirstOrg(ListOrg &L, adr_org &P);
 void deleteAfterOrg(ListOrg &L, adr_org Prec, adr_org &P);
