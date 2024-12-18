@@ -1,19 +1,21 @@
 #include "orgManager.h"
 
 void menu(){
-    cout << "===============================================================" << endl;
-    cout << "1. Insert data organisasi" << endl;
-    cout << "2. Show data organisasi" << endl;
-    cout << "3. Menghaspus data organisasi beserta departemennya" << endl;
-    cout << "4. Mencari data organisasi" << endl;
-    cout << "5. Insert data departemen" << endl;
-    cout << "6. Menghubungkan data organisasi ke departemen" << endl;
-    cout << "7. Menampilkan seluruh data organisasi beserta departemennya" << endl;
-    cout << "8. Mencari data departemen pada organisasi tertentu" << endl;
-    cout << "9. Menghapus data departemen pada organisasi tertentu" << endl;
-    cout << "10. Menghitung jumlah data departemen dari organisasi tertentu" << endl;
-    cout << "0. exit" << endl;
-    cout << "===============================================================" << endl;
+    cout << "====================================" << endl;
+    cout << "     SISTEM PENGELOLAAN ORGANISASI  " << endl;
+    cout << "====================================" << endl;
+    cout << "1. Tambah organisasi" << endl;
+    cout << "2. Tampilkan semua organisasi" << endl;
+    cout << "3. Hapus organisasi dan semua departemennya" << endl;
+    cout << "4. Cari organisasi" << endl;
+    cout << "5. Tambah departemen ke organisasi" << endl;
+    cout << "6. Tampilkan organisasi beserta departemennya" << endl;
+    cout << "7. Cari departemen dalam organisasi" << endl;
+    cout << "8. Hapus departemen dari organisasi" << endl;
+    cout << "9. Hitung jumlah departemen dalam organisasi" << endl;
+    cout << "0. Keluar" << endl;
+    cout << "====================================" << endl;
+    cout << "Masukkan nomor menu (0 untuk keluar): ";
 };
 
 //====================
@@ -266,3 +268,8 @@ adr_dept searchDept(ListDept &LD, string X){
         return NULL;
     };
 };
+
+
+//====================
+// Menu Utils
+//====================
