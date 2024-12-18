@@ -1,6 +1,7 @@
 #include "orgManager.h"
 
 void menu(){
+    cout << "===============================================================" << endl;
     cout << "1. Insert data organisasi" << endl;
     cout << "2. Show data organisasi" << endl;
     cout << "3. Menghaspus data organisasi beserta departemennya" << endl;
@@ -12,7 +13,7 @@ void menu(){
     cout << "9. Menghapus data departemen pada organisasi tertentu" << endl;
     cout << "10. Menghitung jumlah data departemen dari organisasi tertentu" << endl;
     cout << "0. exit" << endl;
-
+    cout << "===============================================================" << endl;
 };
 
 void createListOrg(ListOrg &L){
