@@ -51,6 +51,7 @@ struct ListDept {
 
 void menu();
 bool isEmpty(ListOrg L);
+bool isEmptyDept(ListDept LD);
 
 // ADT Organisasi
 void createListOrg(ListOrg &L);
@@ -70,9 +71,9 @@ adr_dept createElmDept(infotypeDept X);
 void insertFirstDept(ListDept &LD, adr_dept PD);
 void insertLastDept(ListDept &LD, adr_dept PD);
 adr_dept searchDept(ListOrg LO, string X);
-void deleteFirstDept(ListOrg &L, adr_dept &P);
-void deleteAfterDept(ListOrg &L, adr_org Prec, adr_dept &P);
-void deleteLastDept(ListOrg &L, adr_dept &P);
+void deleteFirstDept(ListDept &LD, adr_dept &P);
+void deleteAfterDept(ListDept &LD, adr_dept Prec, adr_dept &P);
+void deleteLastDept(ListDept &LD, adr_dept &P);
 void handleDeleteDept(ListOrg &L, string X);
 
 //General

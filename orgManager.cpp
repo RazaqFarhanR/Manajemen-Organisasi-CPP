@@ -166,3 +166,103 @@ void showOrgOnly(ListOrg L){
        cout << endl;
     }
 };
+
+//====================
+// Departement Utils
+//====================
+
+bool isEmpty(ListDept LD){
+    return (first(LD) == NULL);
+};
+
+adr_dept createElmDept(infotypeDept X){
+    adr_dept P = new elemenDep;
+    info(P).nama = X.nama;
+    info(P).koor = X.koor;
+    info(P).jumlahAnggota = X.jumlahAnggota;
+    next(P) = NULL;
+
+    return P;
+}
+
+void insertFirstDept(ListDept &LD, adr_dept PD) {
+    if (first(LD) == NULL) {
+        first(LD) = PD;
+    } else {
+        next(PD) = first(LD);
+        first(LD) = PD;
+    }
+}
+
+void insertLastDept(ListDept &LD, adr_dept PD){
+    if(first(LD) == NULL){
+        first(LD) = PD;
+    } else {
+        adr_dept last = first(LD);
+        while (next(last) != NULL){
+            last = next(last);
+        };
+        next(last) = PD;
+    }
+};
+
+void deleteFirstDept(ListDept &LD, adr_dept PD){
+    if (!isEmptyDept(LD)) {
+        PD = first(LD);
+        if (next(PD) == NULL) {
+            first(LD) = NULL;
+        } else {
+            first(LD) = next(PD);
+            next(PD) = NULL;
+        }
+    }
+};
+
+void deleteLastDept(ListDept &LD, adr_dept PD){
+    if (!isEmptyDept(LD)) {
+        adr_dept Q = first(LD);
+        if (next(Q) == NULL) {
+            first(LD) = NULL;
+        } else {
+            while (next(next(Q)) != NULL){
+                Q = next(Q);
+            }
+            PD = next(Q);
+            next(Q) = NULL;
+        };
+    };
+};
+
+void deleteAfterOrg(ListDept &LD, adr_dept Prec, adr_dept &P){
+    if (!isEmptyDept(LD)){
+        P = next(Prec);
+        if (Prec == first(LD) && next(Prec) == NULL) {
+            first(LD) = NULL;
+        } else if (next(Prec) == NULL){
+            adr_dept Q = first(LD);
+            while (next(next(Q)) != NULL){
+                Q = next(Q);
+            };
+            P = next(Q);
+            next(Q) = NULL;
+        } else {
+            next(Prec) = next(P);
+            next(P) = NULL;
+        };
+    };
+};
+
+adr_dept searchDept(ListDept &LD, string X){
+    if (first(LD) == NULL){
+        cout << "List Kosong" << endl;
+    } else {
+        adr_dept P = first(LD);
+        while(P != NULL){
+            if (info(P).nama == X){
+                return P;
+            };
+            P = next(P);
+        };
+        return NULL;
+    };
+};
