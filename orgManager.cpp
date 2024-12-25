@@ -1,9 +1,10 @@
 #include "orgManager.h"
 
-void menu(){
-    cout << "====================================" << endl;
-    cout << "     SISTEM PENGELOLAAN ORGANISASI  " << endl;
-    cout << "====================================" << endl;
+void menu(ListOrg &L){
+    int pilih = 0;
+    cout << "=======================================" << endl;
+    cout << "     SISTEM PENGELOLAAN ORGANISASI     " << endl;
+    cout << "=======================================" << endl;
     cout << "1. Tambah organisasi" << endl;
     cout << "2. Tampilkan semua organisasi" << endl;
     cout << "3. Hapus organisasi dan semua departemennya" << endl;
@@ -14,8 +15,49 @@ void menu(){
     cout << "8. Hapus departemen dari organisasi" << endl;
     cout << "9. Hitung jumlah departemen dalam organisasi" << endl;
     cout << "0. Keluar" << endl;
-    cout << "====================================" << endl;
-    cout << "Masukkan nomor menu (0 untuk keluar): ";
+    cout << "=======================================" << endl;
+
+    do {
+        cout << "? Masukkan nomor menu (0 untuk keluar): ";
+        cin >> pilih;
+
+        if (pilih == 0) {
+            cout << "Keluar dari program. Terima kasih!\n";
+            break;
+        }
+
+        switch (pilih){
+            case 1:
+                handlerAddOrg(L);
+                break;
+            case 2:
+                showOrgOnly(L);
+                break;
+            case 3:
+                cout << "pilihan 3" << endl;
+                break;
+            case 4:
+                cout << "pilihan 4" << endl;
+                break;
+            case 5:
+                handlerAddDept(L);
+                break;
+            case 6:
+                showOrgOnly(L);
+                break;
+            case 7:
+                cout << "pilihan 7" << endl;
+                break;
+            case 8:
+                cout << "pilihan 8" << endl;
+                break;
+            case 9:
+                cout << "pilihan 9" << endl;
+                break;
+            default:
+                cout << "! Pilihan tidak valid. Silakan coba lagi." << endl;
+        }
+    } while (pilih != 0);
 };
 
 //====================
@@ -97,7 +139,7 @@ void deleteAfterOrg(ListOrg &L, adr_org Prec, adr_org &P) {
         if (P != NULL) {
             if (next(P) == NULL) {
                 next(Prec) = NULL;
-            } 
+            }
             else {
                 next(Prec) = next(P);
                 prev(next(P)) = Prec;
@@ -209,7 +251,7 @@ void insertLastDept(ListDept &LD, adr_dept PD){
 };
 
 void deleteFirstDept(ListDept &LD, adr_dept PD){
-    if (!isEmptyDept(LD)) {
+    if (first(LD) != NULL) {
         PD = first(LD);
         if (next(PD) == NULL) {
             first(LD) = NULL;
@@ -221,7 +263,7 @@ void deleteFirstDept(ListDept &LD, adr_dept PD){
 };
 
 void deleteLastDept(ListDept &LD, adr_dept PD){
-    if (!isEmptyDept(LD)) {
+    if (first(LD) != NULL) {
         adr_dept Q = first(LD);
         if (next(Q) == NULL) {
             first(LD) = NULL;
@@ -236,7 +278,7 @@ void deleteLastDept(ListDept &LD, adr_dept PD){
 };
 
 void deleteAfterOrg(ListDept &LD, adr_dept Prec, adr_dept &P){
-    if (!isEmptyDept(LD)){
+    if (first(LD) != NULL){
         P = next(Prec);
         if (Prec == first(LD) && next(Prec) == NULL) {
             first(LD) = NULL;
@@ -273,3 +315,24 @@ adr_dept searchDept(ListDept &LD, string X){
 //====================
 // Menu Utils
 //====================
+void handlerAddOrg(ListOrg &LO){
+    infotypeOrg x;
+    adr_org P;
+
+    cout << " > Masukan id Organisasi: ";
+    cin >> x.id;
+    cout << " > Masukan nama Organisasi: ";
+    cin >> x.nama;
+    cout << " > Masukan tahun berdiri Organisasi: ";
+    cin >> x.tahunBerdiri;
+    P = createElmOrg(x);
+
+    if(first(LO) == NULL){
+        insertFirstOrg(LO, P);
+    } else {
+        insertLastOrg(LO, P);
+    }
+
+    cout << "[info]Data berhasil disimpan" << endl;
+    cout << endl;
+}

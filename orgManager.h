@@ -31,7 +31,7 @@ typedef departemen infotypeDept;
 struct elemenOrg {
     adr_org prev;
     infotypeOrg info;
-    adr_dept departemen;
+    adr_dept nextDept;
     adr_org next;
 };
 
@@ -49,7 +49,7 @@ struct ListDept {
     adr_dept first;
 };
 
-void menu();
+void menu(ListOrg &L);
 bool isEmpty(ListOrg L);
 bool isEmptyDept(ListDept LD);
 
@@ -81,5 +81,8 @@ void connectDeptToOrg();
 void showAllOrgWithDept();
 void calculateDeptOnOrg();
 
+//Menu Utils
+void handlerAddOrg(ListOrg &LO);
+void handlerAddDept(ListOrg &LO);
 
 #endif // ORGMANAGER_H_INCLUDED
