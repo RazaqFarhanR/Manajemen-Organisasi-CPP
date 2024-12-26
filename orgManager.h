@@ -64,6 +64,7 @@ void deleteLastOrg(ListOrg &L, adr_org &P);
 void deleteOrgById(ListOrg &L, string id);
 void showOrgOnly(ListOrg L);
 adr_org searchOrgById(ListOrg L, string X);
+adr_org searchOrgByNama(ListOrg L, string X);
 
 // ADT Departemen
 void createListDept(ListDept &LD);
@@ -78,11 +79,13 @@ void handleDeleteDept(ListOrg &L, string X);
 
 //General
 void connectDeptToOrg();
-void showAllOrgWithDept();
+void showAllOrgWithDept(ListOrg orgList);
 void calculateDeptOnOrg();
 
 //Menu Utils
 void handlerAddOrg(ListOrg &LO);
+void searchShowOrg(ListOrg LO);
+void handlerDeleteOrg(ListOrg &LO);
 void handlerAddDept(ListOrg &LO);
 
 #endif // ORGMANAGER_H_INCLUDED
