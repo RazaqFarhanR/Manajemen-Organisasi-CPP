@@ -152,13 +152,13 @@ void deleteAfterOrg(ListOrg &L, adr_org Prec, adr_org &P) {
 
 void deleteOrgById(ListOrg &L, string id){
     if (L.first == NULL) {
-        cout << "List kosong, tidak ada data yang bisa dihapus.\n";
+        cout << "[info]List kosong, tidak ada data yang bisa dihapus.\n";
         return;
     }
 
     adr_org P = searchOrgById(L, id);
     if (P == NULL){
-        cout << "Organisasi tidak ditemukan" << endl;
+        cout << "[info]Organisasi tidak ditemukan" << endl;
         return;
     }
     if (P == first(L)){
@@ -411,7 +411,15 @@ void handlerDeleteOrg(ListOrg &LO){
         P = searchOrgById(LO, id);
         if (P != NULL){
             cout << "? Apakah anda yakin ingin manghapus " << info(P).nama << " beserta departemennya[Y/n]: ";
-            deleteOrgById(LO, id);
+            cin >> input;
+            if (input == "Y" || input == "y"){
+                deleteOrgById(LO, id);
+            }
+            cout << "? Apakah anda ingin menghapus data lain?[Y/n]: ";
+            cin >> input;
+            if (input == "n" || input == "N" || input == "no" || input == "No"){
+                run = false;
+            }
         } else {
             cout << "[info] Organisasi tidak ditemukan" << endl;
             cout << "? Apakah anda ingin mencari lagi[Y/n]: ";
