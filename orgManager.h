@@ -7,6 +7,7 @@
 #define next(p) p->next
 #define first(L) ((L).first)
 #define last(L) ((L).last)
+#define nextDept(P) P->nextDept
 
 using namespace std;
 
@@ -65,27 +66,26 @@ void deleteOrgById(ListOrg &L, string id);
 void showOrgOnly(ListOrg L);
 adr_org searchOrgById(ListOrg L, string X);
 adr_org searchOrgByNama(ListOrg L, string X);
+void showSelectedOrg(adr_org P);
 
 // ADT Departemen
 void createListDept(ListDept &LD);
 adr_dept createElmDept(infotypeDept X);
-void insertFirstDept(ListDept &LD, adr_dept PD);
-void insertLastDept(ListDept &LD, adr_dept PD);
-adr_dept searchDept(ListOrg LO, string X);
-void deleteFirstDept(ListDept &LD, adr_dept &P);
-void deleteAfterDept(ListDept &LD, adr_dept Prec, adr_dept &P);
-void deleteLastDept(ListDept &LD, adr_dept &P);
-void handleDeleteDept(ListOrg &L, string X);
-
-//General
-void connectDeptToOrg();
-void showAllOrgWithDept(ListOrg orgList);
-void calculateDeptOnOrg();
+void insertFirstDept(adr_org PO, adr_dept PD);
+void insertLastDept(adr_org PO, adr_dept PD);
+adr_dept searchDept(adr_org PO, string X);
+void deleteFirstDept(adr_org PO, adr_dept &P);
+void deleteAfterDept(adr_org PO, adr_dept Prec, adr_dept &P);
+void deleteLastDept(adr_org PO, adr_dept &P);
+void deletDeptbyName(adr_org PO, string X);
+void showSelectedDept(adr_dept PD);
 
 //Menu Utils
 void handlerAddOrg(ListOrg &LO);
+void showAllOrgWithDept(ListOrg orgList);
 void searchShowOrg(ListOrg LO);
 void handlerDeleteOrg(ListOrg &LO);
 void handlerAddDept(ListOrg &LO);
-
+void searchShowDept(ListOrg LO);
+void handlerDeleteDept(ListOrg &LO);
 #endif // ORGMANAGER_H_INCLUDED

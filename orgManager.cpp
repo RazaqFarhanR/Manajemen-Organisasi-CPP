@@ -2,22 +2,21 @@
 
 void menu(ListOrg &L){
     int pilih = 0;
-    cout << "=======================================" << endl;
-    cout << "     SISTEM PENGELOLAAN ORGANISASI     " << endl;
-    cout << "=======================================" << endl;
-    cout << "1. Tambah organisasi" << endl;
-    cout << "2. Tampilkan semua organisasi" << endl;
-    cout << "3. Hapus organisasi dan semua departemennya" << endl;
-    cout << "4. Cari organisasi" << endl;
-    cout << "5. Tambah departemen ke organisasi" << endl;
-    cout << "6. Tampilkan organisasi beserta departemennya" << endl;
-    cout << "7. Cari departemen dalam organisasi" << endl;
-    cout << "8. Hapus departemen dari organisasi" << endl;
-    cout << "9. Hitung jumlah departemen dalam organisasi" << endl;
-    cout << "0. Keluar" << endl;
-    cout << "=======================================" << endl;
 
     do {
+        cout << "=======================================" << endl;
+        cout << "     SISTEM PENGELOLAAN ORGANISASI     " << endl;
+        cout << "=======================================" << endl;
+        cout << "1. Tambah organisasi" << endl;
+        cout << "2. Tampilkan semua organisasi" << endl;
+        cout << "3. Hapus organisasi dan semua departemennya" << endl;
+        cout << "4. Cari organisasi" << endl;
+        cout << "5. Tambah departemen ke organisasi" << endl;
+        cout << "6. Tampilkan organisasi beserta departemennya" << endl;
+        cout << "7. Cari departemen dalam organisasi" << endl;
+        cout << "8. Hapus departemen dari organisasi" << endl;
+        cout << "0. Keluar" << endl;
+        cout << "=======================================" << endl;
         cout << "? Masukkan nomor menu (0 untuk keluar): ";
         cin >> pilih;
 
@@ -46,13 +45,10 @@ void menu(ListOrg &L){
                 showAllOrgWithDept(L);
                 break;
             case 7:
-                cout << "pilihan 7" << endl;
+                searchShowDept(L);
                 break;
             case 8:
-                cout << "pilihan 8" << endl;
-                break;
-            case 9:
-                cout << "pilihan 9" << endl;
+                handlerDeleteDept(L);
                 break;
             default:
                 cout << "! Pilihan tidak valid. Silakan coba lagi." << endl;
@@ -73,6 +69,7 @@ adr_org createElmOrg(infotypeOrg X){
     info(P).nama = X.nama;
     info(P).tahunBerdiri = X.tahunBerdiri;
     next(P) = NULL;
+    nextDept(P) = NULL;
 
     return P;
 };
@@ -190,6 +187,7 @@ adr_org searchOrgById(ListOrg L, string X){
             };
             P = next(P);
         };
+        cout << "[info] Organisasi tidak ditemukan" << endl;
         return NULL;
     };
 };
@@ -206,27 +204,75 @@ adr_org searchOrgByNama(ListOrg L, string X){
             };
             P = next(P);
         };
+        cout << "[info] Organisasi tidak ditemukan" << endl;
         return NULL;
     };
 };
 
 void showOrgOnly(ListOrg L){
-    if(isEmpty(L)){
-        cout << "List Kosong" << endl;
+    if (isEmpty(L)) {
+        cout << "[Info] List Kosong" << endl;
     } else {
-       adr_org P = first(L);
-       printf("\n");
-       cout << "List Organisasi:" << endl;
-       while (P != NULL){
-            cout << "ID: " << info(P).id << endl;
-            cout << "Organisasi: " << info(P).nama << endl;
-            cout << "Tahun Berdiri: " << info(P).tahunBerdiri << endl;
+        adr_org P = first(L);
+        cout << "\n===================================================" << endl;
+        cout << "                  LIST ORGANISASI                  " << endl;
+        cout << "===================================================" << endl;
+        while (P != NULL) {
+            // Menghitung jumlah departemen
+            int deptCount = 0;
+            adr_dept currentDept = nextDept(P);
+            while (currentDept != NULL) {
+                deptCount++;
+                currentDept = next(currentDept);
+            }
+
+            // Menampilkan informasi organisasi
+            cout << "ID Organisasi       : " << info(P).id << endl;
+            cout << "Nama Organisasi     : " << info(P).nama << endl;
+            cout << "Tahun Berdiri       : " << info(P).tahunBerdiri << endl;
+            cout << "Jumlah Departemen   : " << deptCount << endl;
             cout << "---------------------------------------------" << endl;
+
             P = next(P);
-       };
-       cout << endl;
+        }
+        cout << "===================================================" << endl;
+        cout << endl;
     }
 };
+
+void showSelectedOrg(adr_org P){
+    if (!P) {
+        cout << "Organisasi tidak ditemukan atau pointer kosong." << endl;
+        return;
+    }
+
+    cout << "===================================================" << endl;
+    cout << "                 DATA ORGANISASI                   " << endl;
+    cout << "===================================================" << endl;
+    cout << "ID Organisasi       : " << info(P).id << endl;
+    cout << "Nama Organisasi     : " << info(P).nama << endl;
+    cout << "Tahun Berdiri       : " << info(P).tahunBerdiri << endl;
+    cout << "---------------------------------------------------" << endl;
+
+    // Menampilkan departemen terkait
+    cout << "  Daftar Departemen:" << endl;
+    adr_dept currentDept = nextDept(P); // Ambil daftar departemen organisasi ini
+    if (currentDept) {
+        int deptIndex = 1;
+        while (currentDept) {
+            cout << "    " << deptIndex++ << ". Nama Departemen  : " << info(currentDept).nama << endl;
+            cout << "       Koordinator      : " << info(currentDept).koor << endl;
+            cout << "       Jumlah Anggota   : " << info(currentDept).jumlahAnggota << endl;
+            cout << "---------------------------------------------------" << endl;
+            currentDept = next(currentDept);
+        }
+    } else {
+        cout << "    Tidak ada departemen." << endl;
+    }
+
+    cout << "===================================================" << endl;
+};
+
 
 //====================
 // Departement Utils
@@ -246,20 +292,24 @@ adr_dept createElmDept(infotypeDept X){
     return P;
 }
 
-void insertFirstDept(ListDept &LD, adr_dept PD) {
-    if (first(LD) == NULL) {
-        first(LD) = PD;
+void insertFirstDept(adr_org PO, adr_dept PD) {
+    if (nextDept(PO) == NULL) {
+        nextDept(PO) = PD;
     } else {
-        next(PD) = first(LD);
-        first(LD) = PD;
+        next(PD) = nextDept(PO);
+        nextDept(PO) = PD;
+    }
+
+    if (nextDept(PO) == PD){
+        cout << "[Info] Data berhasil disimpan" << endl;
     }
 }
 
-void insertLastDept(ListDept &LD, adr_dept PD){
-    if(first(LD) == NULL){
-        first(LD) = PD;
+void insertLastDept(adr_org PO, adr_dept PD){
+    if(nextDept(PO) == NULL){
+        nextDept(PO) = PD;
     } else {
-        adr_dept last = first(LD);
+        adr_dept last = nextDept(PO);
         while (next(last) != NULL){
             last = next(last);
         };
@@ -267,23 +317,23 @@ void insertLastDept(ListDept &LD, adr_dept PD){
     }
 };
 
-void deleteFirstDept(ListDept &LD, adr_dept PD){
-    if (first(LD) != NULL) {
-        PD = first(LD);
+void deleteFirstDept(adr_org PO, adr_dept &PD){
+    if (nextDept(PO) != NULL) {
+        PD = nextDept(PO);
         if (next(PD) == NULL) {
-            first(LD) = NULL;
+            nextDept(PO) = NULL;
         } else {
-            first(LD) = next(PD);
+            nextDept(PO) = next(PD);
             next(PD) = NULL;
         }
     }
 };
 
-void deleteLastDept(ListDept &LD, adr_dept PD){
-    if (first(LD) != NULL) {
-        adr_dept Q = first(LD);
+void deleteLastDept(adr_org PO, adr_dept &PD){
+    if (nextDept(PO) != NULL) {
+        adr_dept Q = nextDept(PO);
         if (next(Q) == NULL) {
-            first(LD) = NULL;
+            nextDept(PO) = NULL;
         } else {
             while (next(next(Q)) != NULL){
                 Q = next(Q);
@@ -294,13 +344,13 @@ void deleteLastDept(ListDept &LD, adr_dept PD){
     };
 };
 
-void deleteAfterOrg(ListDept &LD, adr_dept Prec, adr_dept &P){
-    if (first(LD) != NULL){
+void deleteAfterOrg(adr_org PO, adr_dept Prec, adr_dept &P){
+    if (nextDept(PO) != NULL){
         P = next(Prec);
-        if (Prec == first(LD) && next(Prec) == NULL) {
-            first(LD) = NULL;
+        if (Prec == nextDept(PO) && next(Prec) == NULL) {
+            nextDept(PO) = NULL;
         } else if (next(Prec) == NULL){
-            adr_dept Q = first(LD);
+            adr_dept Q = nextDept(PO);
             while (next(next(Q)) != NULL){
                 Q = next(Q);
             };
@@ -313,11 +363,43 @@ void deleteAfterOrg(ListDept &LD, adr_dept Prec, adr_dept &P){
     };
 };
 
-adr_dept searchDept(ListDept &LD, string X){
-    if (first(LD) == NULL){
-        cout << "List Kosong" << endl;
+void deleteDeptByName(adr_org PO, string x) {
+    if (!PO || nextDept(PO) == NULL) {
+        cout << "[Info] List departemen kosong atau organisasi tidak valid." << endl;
+        return;
+    }
+
+    adr_dept targetDept = searchDept(PO, x);
+
+    if (!targetDept) {
+        cout << "[Info] Departemen dengan nama \"" << x << "\" tidak ditemukan." << endl;
+        return;
+    }
+
+    if (targetDept == nextDept(PO)) {
+        adr_dept temp;
+        deleteFirstDept(PO, temp);
+    } else if (next(targetDept) == NULL) {
+        adr_dept temp;
+        deleteLastDept(PO, temp);
     } else {
-        adr_dept P = first(LD);
+        adr_dept prec = nextDept(PO);
+        while (next(prec) != targetDept) {
+            prec = next(prec);
+        }
+        adr_dept temp;
+        deleteAfterOrg(PO, prec, temp);
+    }
+
+    cout << "[Info] Departemen \"" << x << "\" berhasil dihapus." << endl;
+}
+
+adr_dept searchDept(adr_org PO, string X){
+    if (nextDept(PO) == NULL){
+        cout << "[Info] List Kosong" << endl;
+        return NULL;
+    } else {
+        adr_dept P = nextDept(PO);
         while(P != NULL){
             if (info(P).nama == X){
                 return P;
@@ -325,9 +407,27 @@ adr_dept searchDept(ListDept &LD, string X){
             P = next(P);
         };
         return NULL;
+        cout << "[Info] Departemen tidak ditemukan" << endl;
     };
 };
 
+void showSelectedDept(adr_dept PD){
+    if (!PD) {
+        cout << "[Info] departemen tidak ditemukan" << endl;
+        return;
+    }
+
+    cout << "===================================================" << endl;
+    cout << "                    DATA DEPARTEMEN                " << endl;
+    cout << "===================================================" << endl;
+
+    cout << "Nama Departemen  : " << info(PD).nama << endl;
+    cout << "Koordinator      : " << info(PD).koor << endl;
+    cout << "Jumlah Anggota   : " << info(PD).jumlahAnggota << endl;
+    cout << "---------------------------------------------------" << endl;
+
+    cout << "===================================================" << endl;
+}
 
 //====================
 // Menu Utils
@@ -376,10 +476,8 @@ void searchShowOrg(ListOrg L){
                 cout << "? Masukkan Id Organisasi: ";
                 cin >> keyword;
                 P = searchOrgById(L, keyword);
-                if (P == NULL){
-                    cout << "[info] Organisasi tidak ditemukan" << endl;
-                } else {
-                    cout << P << endl;
+                if (P != NULL){
+                    showSelectedOrg(P);
                 }
                 cout << endl;
                 break;
@@ -387,10 +485,8 @@ void searchShowOrg(ListOrg L){
                 cout << "? Masukkan Nama Organisasi: ";
                 cin >> keyword;
                 P = searchOrgByNama(L, keyword);
-                if (P == NULL){
-                    cout << "[info] Organisasi tidak ditemukan" << endl;
-                } else {
-                    cout << P << endl;
+                if (P != NULL){
+                    showSelectedOrg(P);
                 }
                 cout << endl;
                 break;
@@ -436,7 +532,7 @@ void handlerDeleteOrg(ListOrg &LO){
 void handlerAddDept(ListOrg &L){
     infotypeDept x;
     string keyword;
-    adr_dept PD;
+    adr_dept PD, q;
     adr_org PO;
 
     cout << " > Masukan ID organisasi yang akan ditambahkan departemen: ";
@@ -453,7 +549,13 @@ void handlerAddDept(ListOrg &L){
     cin >> x.jumlahAnggota;
     PD = createElmDept(x);
 
-    PO->nextDept = PD;
+    q = nextDept(PO);
+    if (q == NULL){
+        insertFirstDept(PO, PD);
+    } else {
+        insertLastDept(PO, PD);
+    }
+    cout << endl;
 }
 
 void showAllOrgWithDept(ListOrg orgList) {
@@ -464,35 +566,105 @@ void showAllOrgWithDept(ListOrg orgList) {
         return;
     }
 
-    // Header organisasi
-    cout << "---------------------------------------------------" << endl;
-    cout << "ID"
-         << "Nama Organisasi"
-         << "Tahun Berdiri" << endl;
-    cout << "---------------------------------------------------" << endl;
+    cout << "===================================================" << endl;
+    cout << "                DATA ORGANISASI                    " << endl;
+    cout << "===================================================" << endl;
 
     while (currentOrg) {
-        // Tampilkan informasi organisasi
-        cout << currentOrg->info.id
-             <<currentOrg->info.nama
-             << currentOrg->info.tahunBerdiri << endl;
+        cout << "ID Organisasi       : " << info(currentOrg).id << endl;
+        cout << "Nama Organisasi     : " << info(currentOrg).nama << endl;
+        cout << "Tahun Berdiri       : " << info(currentOrg).tahunBerdiri << endl;
+        cout << "---------------------------------------------------" << endl;
 
-        cout << "  Departemen:" << endl;
-        // Tampilkan departemen terkait jika ada
-        adr_dept currentDept = currentOrg->nextDept;
+        cout << "  Daftar Departemen:" << endl;
+        adr_dept currentDept = nextDept(currentOrg);
         if (currentDept) {
-            int deptIndex = 1; // Menandakan urutan departemen
+            int deptIndex = 1;
             while (currentDept) {
-                cout << "    " << deptIndex++ << ". " << currentDept->info.nama << endl;
-                cout << "       Koordinator: " << currentDept->info.koor << endl;
-                cout << "       Jumlah Anggota: " << currentDept->info.jumlahAnggota << endl;
+                cout << "    " << deptIndex++ << ". Nama Departemen  : " << info(currentDept).nama << endl;
+                cout << "       Koordinator    : " << info(currentDept).koor << endl;
+                cout << "       Jumlah Anggota : " << info(currentDept).jumlahAnggota << endl;
                 cout << "---------------------------------------------------" << endl;
-                currentDept = currentDept->next;
+                currentDept = next(currentDept);
             }
         } else {
             cout << "    Tidak ada departemen." << endl;
+            cout << "---------------------------------------------------" << endl;
         }
 
-        currentOrg = currentOrg->next;
+        currentOrg = next(currentOrg);
     }
+
+    cout << "===================================================" << endl;
+}
+
+void searchShowDept(ListOrg L){
+    adr_org PO;
+    adr_dept PD, x;
+    string id, keyword, input;
+    bool run = true;
+
+    do {
+        cout << "? Masukan Id Organisasi yang ingin dicari: ";
+        cin >> id;
+        PO = searchOrgById(L, id);
+        if (PO != NULL){
+            PD = nextDept(PO);
+            if (PD != NULL){
+                cout << "? Masukan nama departemen yang ingin dicari: ";
+                cin >> keyword;
+                x = searchDept(PO, keyword);
+                showSelectedDept(x);
+                cout << endl;
+            }
+        }
+        cout << "? Apakah anda ingin mencari lagi[Y/n]: ";
+        cin >> input;
+        if (input == "n" || input == "N" || input == "no" || input == "No"){
+            run = false;
+        }
+    } while (run == true);
+}
+
+void handlerDeleteDept(ListOrg &LO){
+    string id, nama, input;
+    adr_org PO;
+    bool run = true;
+
+    do {
+        showOrgOnly(LO);
+        cout << "? Masukan Id Organisasi yang ingin dihapus: ";
+        cin >> id;
+        PO = searchOrgById(LO, id);
+        if (PO != NULL && nextDept(PO) != NULL){
+            cout << "masuk sini";
+            showSelectedOrg(PO);
+            cout << "? Masukan Nama Departemen yang ingin dihapus: ";
+            cin >> nama;
+            adr_dept PD = searchDept(PO, nama);
+            if (PD != NULL){
+                cout << "? Apakah anda yakin ingin manghapus " << info(PD).nama << "?[Y/n]: ";
+                cin >> input;
+                if (input == "Y" || input == "y"){
+                    deleteDeptByName(PO, nama);
+                }
+                cout << "? Apakah anda ingin menghapus data lain?[Y/n]: ";
+                cin >> input;
+                if (input == "n" || input == "N" || input == "no" || input == "No"){
+                    run = false;
+                }
+            }
+        } else {
+            if (PO != NULL && nextDept(PO) == NULL){
+                cout << "[Info] organisasi tidak memiliki departemen" << endl;
+            }
+            cout << "? Apakah anda ingin mencari lagi[Y/n]: ";
+            cin >> input;
+            if (input == "n" || input == "N" || input == "no" || input == "No"){
+                run = false;
+            }
+        }
+
+    } while (run == true);
+    cout << endl;
 }
